@@ -26,9 +26,14 @@ type DnBDB struct {
 	Files    []Show
 }
 
-// ShowResponse A response object containing an array of a list of all available shows
-type ShowResponse struct {
+// ShowsResponse A response object containing an array of a list of all available shows
+type ShowsResponse struct {
 	Shows []string `json:"shows"`
+}
+
+// ShowResponse A response object containing the URL for a requested show
+type ShowResponse struct {
+	URL string `json:"url"`
 }
 
 // DB Create a global database to hold all the show data
@@ -39,7 +44,7 @@ func getShows(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	// Get a complete list of shows
-	showResp := new(ShowResponse)
+	showResp := new(ShowsResponse)
 
 	// Loop through all the events and get the show names
 	for _, show := range DB.Files {
@@ -57,59 +62,32 @@ func getShows(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getHome(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"message": "get called"}`))
-}
-
-func post(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "post called"}`))
-}
-
-func put(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-	w.Write([]byte(`{"message": "put called"}`))
-}
-
-func delete(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"message": "delete called"}`))
-}
-
-func params(w http.ResponseWriter, r *http.Request) {
+func getShow(w http.ResponseWriter, r *http.Request) {
 	pathParams := mux.Vars(r)
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 
-	userID := -1
-	var err error
-	if val, ok := pathParams["userID"]; ok {
-		userID, err = strconv.Atoi(val)
+	if val, ok := pathParams["showID"]; ok {
+		showID, err := strconv.Atoi(val)
+
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"message": "need a number"}`))
-			return
+			fmt.Println(err)
 		}
-	}
 
-	commentID := -1
-	if val, ok := pathParams["commentID"]; ok {
-		commentID, err = strconv.Atoi(val)
+		fmt.Printf("Looking up record %d...\n", showID)
+
+		// Loop through all the events and get the show names
+		resp := new(ShowResponse)
+		resp.URL = DB.Files[showID].URL
+
+		bytes, err := json.MarshalIndent(resp, "", "\t")
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{"message": "need a number"}`))
-			return
+			fmt.Println(err)
 		}
+
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(bytes)
 	}
-
-	query := r.URL.Query()
-	location := query.Get("location")
-
-	w.Write([]byte(fmt.Sprintf(`{"userID": %d, "commentID": %d, "location": "%s" }`, userID, commentID, location)))
 }
 
 func main() {
@@ -131,14 +109,8 @@ func main() {
 
 	api := r.PathPrefix("/api/v1").Subrouter()
 
-	r.HandleFunc("/", getHome).Methods(http.MethodGet)
-
+	api.HandleFunc("/show/{showID}", getShow).Methods(http.MethodGet)
 	api.HandleFunc("/shows", getShows).Methods(http.MethodGet)
-	api.HandleFunc("", post).Methods(http.MethodPost)
-	api.HandleFunc("", put).Methods(http.MethodPut)
-	api.HandleFunc("", delete).Methods(http.MethodDelete)
-
-	api.HandleFunc("/user/{userID}/comment/{commentID}", params).Methods(http.MethodGet)
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
