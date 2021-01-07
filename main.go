@@ -39,6 +39,14 @@ type ShowResponse struct {
 // DB Create a global database to hold all the show data
 var DB DnBDB
 
+func getHome(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+
+	msg := "<html><h1>Punk Science Bassdrive Archive Player</h1><p>There is nothing to see here.</p></html>"
+	fmt.Fprintf(w, msg)
+}
+
 func getShows(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -48,7 +56,7 @@ func getShows(w http.ResponseWriter, r *http.Request) {
 
 	// Loop through all the events and get the show names
 	for _, show := range DB.Files {
-		showResp.Shows = append(showResp.Shows, show.Event)
+		showResp.Shows = append(showResp.Shows, show.Filename)
 	}
 
 	// Convert the object to JSON
@@ -85,7 +93,6 @@ func getShow(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		w.WriteHeader(http.StatusInternalServerError)
 		w.Write(bytes)
 	}
 }
@@ -106,6 +113,8 @@ func main() {
 	fmt.Printf("Loaded %d shows and ready for work.\n", len(DB.Files))
 
 	r := mux.NewRouter()
+
+	r.HandleFunc("/", getHome).Methods((http.MethodGet))
 
 	api := r.PathPrefix("/api/v1").Subrouter()
 
