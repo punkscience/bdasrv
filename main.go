@@ -3,10 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -38,6 +40,13 @@ type ShowResponse struct {
 	URL string `json:"url"`
 }
 
+// HomePageParams An object to carry the parameters required to our home page template
+type HomePageParams struct {
+	Name  string
+	URL   string
+	Track int
+}
+
 // DB Create a global database to hold all the show data
 var DB DnBDB
 
@@ -50,15 +59,17 @@ func getHome(w http.ResponseWriter, r *http.Request) {
 
 	track := rand.Intn(max-min) + min
 
-	msg := "<html><h1>Bassdrive Archive Randomizer</h1><p>This is presently just a server sandbox for experiments. There is nothing to see here.</p>"
-	file := DB.Files[track].Filename
-	url := DB.Files[track].URL
+	params := HomePageParams{Track: track, Name: DB.Files[track].Filename, URL: DB.Files[track].URL}
 
-	fmt.Fprintf(w, msg)
-	fmt.Fprintf(w, "<p>Brought to you by <a href=\"http://twitter.com/realpunkscience\">Darryl Wright</a> using the amazing and generous archive of <a href=\"http://bassdrive.com\">Bassdrive.com</a>.</p>")
-	fmt.Fprintf(w, "<p>%s</p>", file)
-	fmt.Fprintf(w, "<p><audio controls><source src=\"%s\" type=\"audio/mpeg\"></audio></p>", url)
-	fmt.Fprintf(w, "</html>")
+	t, err := template.ParseFiles("home.html")
+	if err != nil {
+		panic(err)
+	}
+
+	err = t.Execute(w, params)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func getShows(w http.ResponseWriter, r *http.Request) {
@@ -138,5 +149,10 @@ func main() {
 	api.HandleFunc("/show/{showID}", getShow).Methods(http.MethodGet)
 	api.HandleFunc("/shows", getShows).Methods(http.MethodGet)
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+	// If there is a cert file, use it
+	if _, err := os.Stat("full-cert.crt"); err == nil {
+		log.Fatal(http.ListenAndServeTLS(":8080", "full-cert.crt", "private-key.key", r))
+	} else {
+		log.Fatal(http.ListenAndServe(":8080", r))
+	}
 }
