@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -43,8 +45,20 @@ func getHome(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 
-	msg := "<html><h1>Punk Science Bassdrive Archive Player</h1><p>There is nothing to see here.</p></html>"
+	min := 0
+	max := len(DB.Files)
+
+	track := rand.Intn(max-min) + min
+
+	msg := "<html><h1>Bassdrive Archive Randomizer</h1><p>This is presently just a server sandbox for experiments. There is nothing to see here.</p>"
+	file := DB.Files[track].Filename
+	url := DB.Files[track].URL
+
 	fmt.Fprintf(w, msg)
+	fmt.Fprintf(w, "<p>Brought to you by <a href=\"http://twitter.com/realpunkscience\">Darryl Wright</a> using the amazing and generous archive of <a href=\"http://bassdrive.com\">Bassdrive.com</a>.</p>")
+	fmt.Fprintf(w, "<p>%s</p>", file)
+	fmt.Fprintf(w, "<p><audio controls><source src=\"%s\" type=\"audio/mpeg\"></audio></p>", url)
+	fmt.Fprintf(w, "</html>")
 }
 
 func getShows(w http.ResponseWriter, r *http.Request) {
@@ -98,6 +112,9 @@ func getShow(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Seed the randomizer
+	rand.Seed(time.Now().UnixNano())
+
 	// Read in the database
 	data, err := ioutil.ReadFile("./filedata.json")
 	if err != nil {
