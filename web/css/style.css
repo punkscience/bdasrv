@@ -1,0 +1,23 @@
+
+body {
+    background-color: darkcyan;
+
+    margin-top: 50px;
+    margin-right: 50px;
+    margin-left: 50px;
+
+    font-family: 'Roboto', sans-serif;
+    font-size: 15pt;
+}
+
+a {
+    color: white;
+}
+
+h1, h2 {
+    color: whitesmoke;
+}
+
+p {
+    color:rgb(206, 205, 205);
+}

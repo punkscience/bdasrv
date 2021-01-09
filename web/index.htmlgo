@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bassdrive Archive Randomizer</title>
+       
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="./css/style.css"></link>
+    </head>
+    <body>
+        <h1>Bassdrive Archive Randomizer</h1>
+        <p>
+            This began as a labour of love in December of 2020 while I was 
+            in Covid 19 lockdown. I wanted to write a micro-service in Go and I had stumbled upon <a href="http://bassdrive.com" target="_blank">Bassdrive's</a>
+            very generous archive of Drum and Bass mixes going back over a decade. So I built a database of all the archive files 
+            and a web API which serves them up on demand. I like to be surprised so this page allows you to randomize a new mix whenever
+            you want simply by refreshing it. 
+        </p>
+        <p>
+            Feel free to follow me on <a href="http://twitter.com/realpunkscience" target="_blank">Twitter</a> 
+        </p>
+        <h2>{{.Name}}</h2> 
+        <p><audio controls><source src="{{.URL}}" type="audio/mpeg"></audio></p>
+    </body>
+</html>

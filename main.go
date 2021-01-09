@@ -49,6 +49,11 @@ type HomePageParams struct {
 
 // DB Create a global database to hold all the show data
 var DB DnBDB
+var tpl *template.Template
+
+func init() {
+	tpl = template.Must(template.ParseGlob("web/*.htmlgo"))
+}
 
 func getHome(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -61,15 +66,8 @@ func getHome(w http.ResponseWriter, r *http.Request) {
 
 	params := HomePageParams{Track: track, Name: DB.Files[track].Filename, URL: DB.Files[track].URL}
 
-	t, err := template.ParseFiles("home.html")
-	if err != nil {
-		panic(err)
-	}
+	tpl.ExecuteTemplate(w, "index.htmlgo", params)
 
-	err = t.Execute(w, params)
-	if err != nil {
-		panic(err)
-	}
 }
 
 func getShows(w http.ResponseWriter, r *http.Request) {
@@ -141,8 +139,12 @@ func main() {
 	fmt.Printf("Loaded %d shows and ready for work.\n", len(DB.Files))
 
 	r := mux.NewRouter()
+	fs := http.FileServer(http.Dir("web/"))
 
 	r.HandleFunc("/", getHome).Methods((http.MethodGet))
+
+	// handle static files too
+	r.PathPrefix("/").Handler(http.StripPrefix("/", fs))
 
 	api := r.PathPrefix("/api/v1").Subrouter()
 
