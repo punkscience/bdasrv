@@ -61,7 +61,7 @@ func getHome(w http.ResponseWriter, r *http.Request) {
 
 	params := HomePageParams{Track: track, Name: DB.Files[track].Filename, URL: DB.Files[track].URL}
 
-	t, err := template.ParseFiles("home.html")
+	t, err := template.ParseFiles("./web/index.html")
 	if err != nil {
 		panic(err)
 	}
@@ -137,6 +137,10 @@ func main() {
 	if err != nil {
 		fmt.Println("error:", err)
 	}
+
+	// Set up a general file server
+	fileServer := http.FileServer(http.Dir("./web"))
+	http.Handle("/web/", http.StripPrefix("/web", fileServer))
 
 	fmt.Printf("Loaded %d shows and ready for work.\n", len(DB.Files))
 
