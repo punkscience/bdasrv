@@ -119,6 +119,18 @@ func getShow(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func redirect(w http.ResponseWriter, req *http.Request) {
+	// remove/add not default ports from req.Host
+	target := "https://" + req.Host + req.URL.Path
+	if len(req.URL.RawQuery) > 0 {
+		target += "?" + req.URL.RawQuery
+	}
+	log.Printf("redirect to: %s", target)
+	http.Redirect(w, req, target,
+		// see comments below and consider the codes 308, 302, or 301
+		http.StatusMovedPermanently)
+}
+
 func main() {
 	// Seed the randomizer
 	rand.Seed(time.Now().UnixNano())
@@ -151,7 +163,9 @@ func main() {
 	api.HandleFunc("/show/{showID}", getShow).Methods(http.MethodGet)
 	api.HandleFunc("/shows", getShows).Methods(http.MethodGet)
 
-	// If there is a cert file, use it
+	// redirect every http request to https
+	go http.ListenAndServe(":80", http.HandlerFunc(redirect))
+
 	fmt.Println("Running as secure web server.")
 	log.Fatal(http.ListenAndServeTLS(":443", "certs/certificate.crt", "certs/private.key", r))
 }
