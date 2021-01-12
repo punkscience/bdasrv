@@ -15,3 +15,5 @@
 # vendor/
 web/.DS_Store
 .DS_Store
+certs/private.key
+bdasrv

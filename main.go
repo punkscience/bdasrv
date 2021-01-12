@@ -8,7 +8,6 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
@@ -139,6 +138,7 @@ func main() {
 	fmt.Printf("Loaded %d shows and ready for work.\n", len(DB.Files))
 
 	r := mux.NewRouter()
+
 	fs := http.FileServer(http.Dir("web/"))
 
 	r.HandleFunc("/", getHome).Methods((http.MethodGet))
@@ -152,9 +152,6 @@ func main() {
 	api.HandleFunc("/shows", getShows).Methods(http.MethodGet)
 
 	// If there is a cert file, use it
-	if _, err := os.Stat("full-cert.crt"); err == nil {
-		log.Fatal(http.ListenAndServeTLS(":8080", "full-cert.crt", "private-key.key", r))
-	} else {
-		log.Fatal(http.ListenAndServe(":8080", r))
-	}
+	fmt.Println("Running as secure web server.")
+	log.Fatal(http.ListenAndServeTLS(":443", "certs/certificate.crt", "certs/private.key", r))
 }
