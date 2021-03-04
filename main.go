@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -63,7 +64,13 @@ func getHome(w http.ResponseWriter, r *http.Request) {
 
 	track := rand.Intn(max-min) + min
 
-	params := HomePageParams{Track: track, Name: DB.Files[track].Filename, URL: DB.Files[track].URL}
+	filename := DB.Files[track].Filename
+
+	// Carve off the mp3
+	filename = strings.Replace(filename, ".mp3", "", -1)
+	url := strings.Replace(DB.Files[track].URL, "http:", "https:", -1)
+
+	params := HomePageParams{Track: track, Name: filename, URL: url}
 
 	tpl.ExecuteTemplate(w, "index.htmlgo", params)
 

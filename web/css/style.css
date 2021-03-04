@@ -1,7 +1,7 @@
 
 body {
-    background-color: darkcyan;
-    background-image: url('./images/background.jpg');
+    background-color: rgba(6, 117, 207, 0.726);
+    background-image: url('../images/background.jpg');
     
     margin-top: 50px;
     margin-right: 50px;
@@ -21,4 +21,8 @@ h1, h2 {
 
 p {
     color:rgb(206, 205, 205);
+}
+
+.block {
+    background-color: rgba(49, 45, 45, 0.5); 
 }
