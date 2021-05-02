@@ -30,6 +30,10 @@ type DnBDB struct {
 	Files    []Show
 }
 
+type PostShows struct {
+	Files []Show `json:"files"`
+}
+
 // ShowsResponse A response object containing an array of a list of all available shows
 type ShowsResponse struct {
 	Shows []string `json:"shows"`
@@ -126,6 +130,27 @@ func getShow(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// func postShows(w http.ResponseWriter, r *http.Request) {
+
+// 	// Read the incoming request
+// 	var showsPostReq PostShows
+
+// 	err := json.NewDecoder(r.Body).Decode(&showsPostReq)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	added := 0
+// 	for _, show := range showsPostReq.Files {
+// 		if findShow(show) == -1 {
+// 			addShow(show)
+// 			added++
+// 		}
+// 	}
+
+// }
+
 func redirect(w http.ResponseWriter, req *http.Request) {
 	// remove/add not default ports from req.Host
 	target := "https://" + req.Host + req.URL.Path
@@ -161,18 +186,15 @@ func main() {
 	fs := http.FileServer(http.Dir("web/"))
 
 	r.HandleFunc("/", getHome).Methods((http.MethodGet))
+	r.HandleFunc("/api/v1/show/{showID}", getShow).Methods(http.MethodGet)
+	r.HandleFunc("/api/v1/shows", getShows).Methods(http.MethodGet)
+	//r.HandleFunc("/api/v1/shows", postShows).Methods(http.MethodPost)
 
 	// handle static files too
 	r.PathPrefix("/").Handler(http.StripPrefix("/", fs))
 
-	api := r.PathPrefix("/api/v1").Subrouter()
-
-	api.HandleFunc("/show/{showID}", getShow).Methods(http.MethodGet)
-	api.HandleFunc("/shows", getShows).Methods(http.MethodGet)
-
-	// redirect every http request to https
-	go http.ListenAndServe(":80", http.HandlerFunc(redirect))
-
 	fmt.Println("Running as secure web server.")
-	log.Fatal(http.ListenAndServeTLS(":443", "certs/certificate.crt", "certs/private.key", r))
+
+	// Listen
+	http.ListenAndServe(":80", r)
 }
