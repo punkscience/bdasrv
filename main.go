@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
-	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -128,39 +127,6 @@ func getShow(w http.ResponseWriter, r *http.Request) {
 
 		w.Write(bytes)
 	}
-}
-
-// func postShows(w http.ResponseWriter, r *http.Request) {
-
-// 	// Read the incoming request
-// 	var showsPostReq PostShows
-
-// 	err := json.NewDecoder(r.Body).Decode(&showsPostReq)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	added := 0
-// 	for _, show := range showsPostReq.Files {
-// 		if findShow(show) == -1 {
-// 			addShow(show)
-// 			added++
-// 		}
-// 	}
-
-// }
-
-func redirect(w http.ResponseWriter, req *http.Request) {
-	// remove/add not default ports from req.Host
-	target := "https://" + req.Host + req.URL.Path
-	if len(req.URL.RawQuery) > 0 {
-		target += "?" + req.URL.RawQuery
-	}
-	log.Printf("redirect to: %s", target)
-	http.Redirect(w, req, target,
-		// see comments below and consider the codes 308, 302, or 301
-		http.StatusMovedPermanently)
 }
 
 func main() {
