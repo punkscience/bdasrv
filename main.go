@@ -47,6 +47,8 @@ type ShowResponse struct {
 type HomePageParams struct {
 	Name  string
 	URL   string
+	Series string
+	StreamName string
 	Track int
 }
 
@@ -73,7 +75,13 @@ func getHome(w http.ResponseWriter, r *http.Request) {
 	filename = strings.Replace(filename, ".mp3", "", -1)
 	url := strings.Replace(DB.Files[track].URL, "http:", "https:", -1)
 
-	params := HomePageParams{Track: track, Name: filename, URL: url}
+	//series := DB.Files[track].Event
+	split := strings.Split(DB.Files[track].Event, " - ")
+	artist := split[1]
+	streamname := split[0]
+	date := strings.Replace( strings.Replace( strings.Split(filename, " ")[0], "[", "(", -1 ), "]", ")", -1 )
+
+	params := HomePageParams{Track: track, Name: filename, URL: url, Series: artist, StreamName: streamname + " " + date }
 
 	tpl.ExecuteTemplate(w, "index.htmlgo", params)
 
@@ -159,7 +167,7 @@ func main() {
 	// handle static files too
 	r.PathPrefix("/").Handler(http.StripPrefix("/", fs))
 
-	fmt.Println("Running as secure web server.")
+	fmt.Println("Running as web server.")
 
 	// Listen
 	http.ListenAndServe(":80", r)

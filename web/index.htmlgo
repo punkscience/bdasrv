@@ -1,36 +1,46 @@
 <!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
     <head>
-        <title>Robot Drum: A Bassdrive Archive Randomizer</title>
-       
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Robot Drum</title>
+        <meta name="Robot Drum" content="A Drum and Bass archive player.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+        <link rel="stylesheet" href="./css/style.css">
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-
-        <link rel="stylesheet" href="./css/style.css"></link>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
     </head>
     <body>
-        <h1>Robot Drum: A Bassdrive Archive Randomizer</h1>
-        <p class="block">
-            Robot Drum began as a labour of love in December of 2020. I was 
-            in Covid 19 lockdown and wanted to write a micro-service in Go and explore docker container and server architecture. 
-            I had stumbled upon <a href="https://bassdrive.com" target="_blank">Bassdrive's</a>
-            very generous archive of Drum and Bass mixes going back over a decade and wanted an easy way to randomize among them. So I
-             built a database of all the archive files and a web API which serves them up on demand. I like to be surprised so this
-              page allows you to randomize a new mix whenever you want simply by refreshing it. Enjoy!
-        </p>
-        
-        <h2>{{.Name}}</h2> 
-        <p><audio controls><source src="{{.URL}}" type="audio/mpeg"></audio></p>
+        <div class="title">ROBOT DRUM</div>
+
+        <div class="field_list">
+            <div class="field">{{.Series}}</div>
+            <div class="field">{{.StreamName}}</div>
+        </div>
+
+        <div class="button_box">
+            <div class="button_play" id="play">
+                <div class="triangle" id="triangle"></div>
+                <div class="bar" id="bar1"></div>
+                <div class="bar" id="bar2"></div>
+            </div>
+            <!-- <div class="button_next" id="next">
+                <div class="bar"></div>
+                <div id="button_next_tri"></div>
+            </div> -->
+        </div>
+        <script src="scripts.js" async defer></script>
+
+        <audio id="player">
+            <source
+                src={{.URL}} type="audio/mpeg">
+        </audio>
+
+        <div class="footer">Site by Punk Science Studios Inc. -- All mixes sourced from the <a href="bassdrive.com">BassDrive archive.</a></div>
     </body>
 </html>
