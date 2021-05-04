@@ -1,5 +1,13 @@
 body {
     background-color:#afd275;
+    color:rgb(0, 0, 0);
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size:12pt;
+}
+
+p {
+    margin-left: 15%;
+    margin-right: 15%;
 }
 
 

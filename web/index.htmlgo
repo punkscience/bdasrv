@@ -18,6 +18,13 @@
     <body>
         <div class="title">ROBOT DRUM</div>
 
+        <p>
+            Robot Drum began as an exercise to learn how to build microservices using Go. I discovered
+            the generous wealth of Drum & Bass mixes on <a href="http://www.bassdrive.com">the BassDrive archive</a>,
+            I wanted a way to quickly randomize among them and thus eliminate choice and promote discovery.
+            I hope you enjoy it.
+        </p>
+
         <div class="field_list">
             <div class="field">{{.Series}}</div>
             <div class="field">{{.StreamName}}</div>
@@ -41,6 +48,6 @@
                 src={{.URL}} type="audio/mpeg">
         </audio>
 
-        <div class="footer">Site by <a href="http://punkscience.ca">Punk Science Studios Inc.</a>  --  All mixes sourced from <a href="http://www.bassdrive.com">the BassDrive archive.</a></div>
+        <div class="footer">Site by <a href="http://punkscience.ca" target="_blank">Punk Science Studios Inc.</a>  --  All mixes sourced from <a href="http://www.bassdrive.com" target="_blank">the BassDrive archive.</a></div>
     </body>
 </html>
