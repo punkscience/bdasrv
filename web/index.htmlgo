@@ -41,6 +41,6 @@
                 src={{.URL}} type="audio/mpeg">
         </audio>
 
-        <div class="footer">Site by Punk Science Studios Inc. -- All mixes sourced from the <a href="bassdrive.com">BassDrive archive.</a></div>
+        <div class="footer">Site by <a href="http://punkscience.ca">Punk Science Studios Inc.</a>  --  All mixes sourced from <a href="http://www.bassdrive.com">the BassDrive archive.</a></div>
     </body>
 </html>
