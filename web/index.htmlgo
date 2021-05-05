@@ -14,13 +14,13 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
-    </head>
+</head>
     <body>
         <div class="title">ROBOT DRUM</div>
 
         <p>
-            Robot Drum began as an exercise to learn how to build microservices using Go. I discovered
-            the generous wealth of Drum & Bass mixes on <a href="http://www.bassdrive.com">the BassDrive archive</a>,
+            Robot Drum began as an exercise in learning how to build microservices using Go. After I discovered
+            the generous list of Drum & Bass mixes from BassDrive's archive going back decdes,
             I wanted a way to quickly randomize among them and thus eliminate choice and promote discovery.
             I hope you enjoy it.
         </p>
@@ -33,8 +33,11 @@
         <div class="button_box">
             <div class="button_play" id="play">
                 <div class="triangle" id="triangle"></div>
-                <div class="bar" id="bar1"></div>
-                <div class="bar" id="bar2"></div>
+                <div class="barcontainer">
+                    <div class="bar" id="bar1"></div>
+                    <div class="bar" id="bar2"></div>   
+                </div>
+                
             </div>
             <!-- <div class="button_next" id="next">
                 <div class="bar"></div>
@@ -48,6 +51,10 @@
                 src={{.URL}} type="audio/mpeg">
         </audio>
 
-        <div class="footer">Site by <a href="http://punkscience.ca" target="_blank">Punk Science Studios Inc.</a>  --  All mixes sourced from <a href="http://www.bassdrive.com" target="_blank">the BassDrive archive.</a></div>
+        <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+            data-id="DarrylWright" data-description="Support me on Buy me a coffee!" data-message="" data-color="#79D6B5"
+            data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+        <div class="footer">Site by <a href="http://punkscience.ca" target="_blank">Darryl Wright</a>  --  All mixes sourced from <a href="http://www.bassdrive.com" target="_blank">the BassDrive archive.</a></div>
     </body>
 </html>
